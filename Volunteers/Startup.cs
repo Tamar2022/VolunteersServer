@@ -35,7 +35,7 @@ namespace Volunteers
         public IConfiguration Configuration { get; }
 
         // This method gets called by the run
-        // . Use this method to add services to the container.
+        // . Use this method to add services to the container.  
         public void ConfigureServices(IServiceCollection services)
         {
             var config = Configuration.GetSection("AppSettings");
