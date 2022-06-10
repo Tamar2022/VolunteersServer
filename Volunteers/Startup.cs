@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Volunteers.MiddleWare;
 
 namespace Volunteers
 {
@@ -58,6 +59,7 @@ namespace Volunteers
                 };
             });
             services.AddScoped<IMatchingFunctionBL, MatchingFunctionBL>();
+            services.AddResponseCaching();
             services.AddScoped<IImageBL, ImageBL>();
             services.AddScoped<IUserBL, UserBL>();
             services.AddScoped<IUserDL, UserDL>();
@@ -123,7 +125,9 @@ namespace Volunteers
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseCacheMiddleware();
             app.UseAuthentication();
+            app.UseCSPMiddleware();
             app.UseRouting();
             
             app.Map("/api", (api1) =>
