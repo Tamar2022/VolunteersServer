@@ -41,6 +41,8 @@ namespace DL
         public async Task<Person> PutPersonDLAsync(Person p)
         {
             var person = await volunteersContext.Person.FindAsync(p.PersonId);
+            p.Password = person.Password;
+            p.Salt = person.Salt;
             volunteersContext.Entry(person).CurrentValues.SetValues(p);
             await volunteersContext.SaveChangesAsync();
             return p;

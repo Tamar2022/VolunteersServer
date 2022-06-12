@@ -34,7 +34,7 @@ namespace Volunteers.Controllers
 
         public async Task<ActionResult<List<Drive>>> GetForHistoryAsync(int driverId)
         {
-            return await driveBL.GetDriveBLForHistoryAsync(driverId);//change to not nullable!!!!!!!!!!!
+            return await driveBL.GetDriveBLForHistoryAsync(driverId);
         }
 
         //get for future
@@ -42,7 +42,14 @@ namespace Volunteers.Controllers
         
         public async Task<ActionResult<List<Drive>>> GetForFutureAsync(int driverId)
         {
-            return await driveBL.GetDriveBLForFutureAsync(driverId);//changed to not nullable?
+            try
+            {
+                return await driveBL.GetDriveBLForFutureAsync(driverId);
+
+            }catch(Exception e)
+            {
+                return null;
+            }
         }
 
        // POST api/<DriveController>
@@ -52,23 +59,14 @@ namespace Volunteers.Controllers
             //return await driveBL.PostDriveBLAsync(value);
         }
 
-        [HttpGet("googlemap")]
-        public IActionResult googlemap(Drive value,int n)
-        {
-          //  var res = matchingFunctionBL.MatchingFunctionForDisposableDrive(value,n);
-            
-            return Ok();
-        }
-        //artificial intelligence
-        //post for recorded request
-        //[HttpPost("{driverId}")]
-        //public void Post(/*הקלטה,*/int driverId)
+        //[HttpGet("googlemap")]
+        //public IActionResult googlemap(Drive value,int n)
         //{
-        //    return await driveBL.PostDriveBLForRecorderedRequestAsync(/*הקלטה,*/ driverId);
+        //  //  var res = matchingFunctionBL.MatchingFunctionForDisposableDrive(value,n);
+            
+        //    return Ok();
         //}
-
-
-        // PUT api/<DriveController>/5
+        
 
         //DELETE api/<DriveController>/5
         [HttpDelete("{id}")]

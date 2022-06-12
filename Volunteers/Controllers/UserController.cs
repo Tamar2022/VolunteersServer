@@ -81,6 +81,7 @@ namespace Volunteers.Controllers
 
         //PUT
         [HttpPut("{personId}")]
+        [AllowAnonymous]
         public async Task<Person> PutAsync(int personId, [FromBody] Person pd)
         {
             

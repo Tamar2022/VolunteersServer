@@ -134,7 +134,8 @@ namespace BL
 
         public async Task<Person> PutUserBLAsync(int id,Person p)
         {
-            return await userDL.PutUserDLAsync(id,p);
+            return await personDL.PutPersonDLAsync(p);
+            //return await userDL.PutUserDLAsync(id,p);
         }
         public static List<UserPerson> WithoutPasswords(List<UserPerson> users)
         {

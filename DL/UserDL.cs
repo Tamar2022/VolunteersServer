@@ -113,6 +113,8 @@ namespace DL
             var p1 = await volunteersContext.Person.FindAsync(id);
             if (p1 == null)
                 throw new Exception("not exist!");
+            p.Password = p1.Password;
+            p.Salt = p1.Salt;
             volunteersContext.Entry(p1).CurrentValues.SetValues(p);
             await volunteersContext.SaveChangesAsync();
             return p;
