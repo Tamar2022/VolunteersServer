@@ -109,7 +109,14 @@ namespace BL
                 throw new Exception("no person like that");
             return d;
         }
-        public async Task DeleteDriverBLAsync(int id)
+
+
+
+        public async Task<int> ConfirmDriverBLAsync(int id,Driver d)
+        {
+            return await driverDL.ConfirmDriverDLAsync(id,d);
+        }
+            public async Task DeleteDriverBLAsync(int id)
         {
              await driverDL.DeleteDriverDLAsync(id);
         }

@@ -33,11 +33,13 @@ namespace Volunteers.Controllers
         {
             var futureDrives= await driveBL.GetFutureDrivesBLAsync(userId);
             List<DriveDTO> futureDrivesDTO=new List<DriveDTO>();
+            if(futureDrives.Count>0)
+            {
             foreach (var drive in futureDrives)
             {
                 futureDrivesDTO.Add( _mapper.Map<Drive, DriveDTO>(drive));
             }
-
+            }
             return futureDrivesDTO;
         }
 

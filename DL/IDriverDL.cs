@@ -13,6 +13,7 @@ namespace DL
         Task<Driver> PostDriverDLAsync(Driver d);
         Task<int> PutOnlyDriverDLAsync(int id, string driverLicense);
         Task<Driver> PutDriverDLAsync(int id,Driver d);
+        Task<int> ConfirmDriverDLAsync(int id, Driver d);
         Task DeleteDriverDLAsync(int id);
 
     }

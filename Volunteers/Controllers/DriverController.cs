@@ -111,16 +111,27 @@ namespace Volunteers.Controllers
         
 
         // PUT api/<DriverController>/5
-        [HttpPut("{id}")]//("{DriverId}")
-        public async Task<Driver> PutAsync( int id,[FromBody] UserPerson value)
+        [HttpPut("{driverId}")]//("{DriverId}")
+        public async Task<Driver> PutAsync( int driverId, [FromBody] UserPerson value)
         {
-            return await driverBL.PutDriverBLAsync(id,value);
+            return await driverBL.PutDriverBLAsync(driverId, value);
         }
-        [HttpPut("{id}/DriverDTO")]//("{DriverId}")
-        public async Task<Driver> PutAsync(int id, [FromBody] DriverDTO value)
+
+        [HttpPut("{driverId}/DriverDTO")]//("{DriverId}")
+        public async Task<Driver> PutAsync(int driverId, [FromBody] DriverDTO value)
         {
-            return await driverBL.PutDriverDTOBLAsync(id, value);
+            return await driverBL.PutDriverDTOBLAsync(driverId, value);//למה 2 פונקציות????????????????????????
         }
+
+
+
+
+        [HttpPut("confirmDriver/{driverId}")]//("{DriverId}")
+        public async Task<int> PutAsync(int driverId,Driver d)
+        {
+            return await driverBL.ConfirmDriverBLAsync(driverId,d);
+        }
+
         // DELETE api/<DriverController>/5
         [HttpDelete("{id}")]
         public async Task DeleteAsync(int id)

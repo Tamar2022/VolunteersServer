@@ -11,6 +11,7 @@ namespace BL
         Task<List<Driver>> GetAllDriversBLAsync();
         Task<int> PutOnlyDriverBLAsync(int id,string driverLicense);
         Task<Driver> PutDriverDTOBLAsync(int id, DriverDTO d);
+        Task<int> ConfirmDriverBLAsync(int id, Driver d);
         Task<Driver> PutDriverBLAsync(int id, UserPerson d);
 
         Task<Driver> PostDriverBLAsync(DriverDTO pd);

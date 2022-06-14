@@ -104,7 +104,21 @@ namespace DL
             await volunteersContext.SaveChangesAsync();
             return d;
         }
-        public async Task DeleteDriverDLAsync(int id)
+
+        public async Task<int> ConfirmDriverDLAsync(int id, Driver d)
+        {
+          var driverToConfirm=  await volunteersContext.Driver.FindAsync(id);
+            
+            if (driverToConfirm != null)
+            {
+                volunteersContext.Entry(driverToConfirm).CurrentValues.SetValues(d);
+                await volunteersContext.SaveChangesAsync();
+                return id;
+            }
+            return 0;
+        }
+
+            public async Task DeleteDriverDLAsync(int id)
         {
            var d= await volunteersContext.Driver.FindAsync(id);
             if (d == null)
