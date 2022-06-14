@@ -7,6 +7,7 @@ namespace DL
 {
     public interface IDriveDL
     {
+        Task<List<Drive>> GetFutureDrivesDLAsync(int userId);
         Task<List<Drive>> GetDriveDLForHistoryAsync(int driverId);
         Task<List<Drive>> GetDriveDLForFutureAsync(int driverId);
         Task<Drive> GetDriveByPassengerRequestIdDLAsync(int prId);

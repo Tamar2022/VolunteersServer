@@ -6,19 +6,29 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace DL
 {
     public class DriveDL : IDriveDL
     {
         VolunteersContext volunteersContext;
-
+       
         public DriveDL(VolunteersContext volunteersContext)
         {
             this.volunteersContext = volunteersContext;
         }
 
+
+        public async Task<List<Drive>> GetFutureDrivesDLAsync(int userId)
+        {
+            var futureDrives = await volunteersContext.Drive.Include(d => d.PassengerRequest).Where(d => d.PassengerRequest.UserId == userId).ToListAsync();
+            if (futureDrives.Count == 0)
+                return null;
+            return futureDrives;
+        }
+
         //get by driverId for history list
-        public async Task<List<Drive>> GetDriveDLForHistoryAsync(int driverId)
+            public async Task<List<Drive>> GetDriveDLForHistoryAsync(int driverId)
         {
 
             var historyDrive = await volunteersContext.Drive.Include(d=>d.DriverRequest).Select(d => new

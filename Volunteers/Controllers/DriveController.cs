@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using DTO;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,24 +16,35 @@ namespace Volunteers.Controllers
     [ApiController]
     public class DriveController : ControllerBase
     {
+        IMapper _mapper;
         IDriveBL driveBL;
         //MatchingFunctionBL matchingFunctionBL;
-        public DriveController(IDriveBL driveBL)//, MatchingFunctionBL matchingFunctionBL)
+        public DriveController(IDriveBL driveBL, IMapper mapper)//, MatchingFunctionBL matchingFunctionBL)
         {
             this.driveBL = driveBL;
-         //   this.matchingFunctionBL = matchingFunctionBL;
+            _mapper = mapper;
+            //   this.matchingFunctionBL = matchingFunctionBL;
         }
-        // GET: api/<DriveController>
-        //[HttpGet]
-        //public async Task<ActionResult<List<Drive>> GetAsync()
-        //{
-        //    return 
-        //}
 
-        // GET api/<DriveController>/5
-        //get for history
-        [HttpGet("DriverHistory/{driverId}")]
 
+        // GET: api/<DriveController> /5  
+        [HttpGet("FutureDrives/{userId}")]
+        public async Task<ActionResult<List<DriveDTO>>> GetAsync(int userId)
+        {
+            var futureDrives= await driveBL.GetFutureDrivesBLAsync(userId);
+            List<DriveDTO> futureDrivesDTO=new List<DriveDTO>();
+            foreach (var drive in futureDrives)
+            {
+                futureDrivesDTO.Add( _mapper.Map<Drive, DriveDTO>(drive));
+            }
+
+            return futureDrivesDTO;
+        }
+
+
+    // GET api/<DriveController>/5
+    //get for history
+    [HttpGet("DriverHistory/{driverId}")]
         public async Task<ActionResult<List<Drive>>> GetForHistoryAsync(int driverId)
         {
             return await driveBL.GetDriveBLForHistoryAsync(driverId);
@@ -39,7 +52,6 @@ namespace Volunteers.Controllers
 
         //get for future
         [HttpGet("DriverFuture/{driverId}")]
-        
         public async Task<ActionResult<List<Drive>>> GetForFutureAsync(int driverId)
         {
             try

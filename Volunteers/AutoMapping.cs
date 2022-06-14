@@ -24,8 +24,15 @@ namespace Volunteers
                 //      })))
                 .ForMember(u=>u.ManagerId,p=>p.MapFrom(p=>p.Users.SingleOrDefault(m => m.TypeId == 0).UserId));
 
-            CreateMap<DriverRequest, DriverRequestDTO>(); 
-                
+            CreateMap<DriverRequest, DriverRequestDTO>();
+            CreateMap<Drive, DriveDTO>()
+                .ForMember(d=>d.Time, pr=>pr.MapFrom(pr=>pr.PassengerRequest.Time))
+                .ForMember(d=>d.SourceStreet, pr => pr.MapFrom(pr => pr.PassengerRequest.SourceStreet))
+                .ForMember(d => d.DestinationStreet, pr => pr.MapFrom(pr => pr.PassengerRequest.DestinationStreet))
+                .ForMember(d => d.IsValid, pr => pr.MapFrom(pr => pr.PassengerRequest.IsValid))
+                .ForMember(d => d.IsHandicapped, pr => pr.MapFrom(pr => pr.PassengerRequest.IsHandicapped))
+                .ForMember(d => d.NumOfSeats, pr => pr.MapFrom(pr => pr.PassengerRequest.NumOfSeats));
+
 
 
         }

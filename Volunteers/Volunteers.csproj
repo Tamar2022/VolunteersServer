@@ -13,6 +13,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Images\1059\001_211.JPG" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\Images\1059\001_211.JPG">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="GoogleMapsApi" Version="1.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.12" />

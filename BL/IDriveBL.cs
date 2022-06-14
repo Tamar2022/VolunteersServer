@@ -6,6 +6,7 @@ namespace BL
 {
     public interface IDriveBL
     {
+        Task<List<Drive>> GetFutureDrivesBLAsync(int userId);
         Task<List<Drive>> GetDriveBLForHistoryAsync(int driverId);
         Task<List<Drive>> GetDriveBLForFutureAsync(int driverId);
         Task<Drive> PostDriveBLAsync(Drive d);

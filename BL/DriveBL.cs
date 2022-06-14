@@ -36,6 +36,13 @@ namespace BL
             //appSettings = (AppSettings)_appSettings;
 
         }
+
+        public async Task<List<Drive>> GetFutureDrivesBLAsync(int userId)
+        {
+            return await driveDL.GetFutureDrivesDLAsync(userId);
+        }
+
+
         //get by driverId for history list
         public async Task<List<Drive>> GetDriveBLForHistoryAsync(int driverId)
         {

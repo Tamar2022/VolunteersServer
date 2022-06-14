@@ -113,7 +113,7 @@ namespace BL
                 //{ PersonId=p.PersonId,Email=p.Email, FullName=p.FullName, Gender=p.Gender, Password=p.Password ,Salt=p.Salt, Phone=p.Phone};
                 var up = _mapper.Map<Person, UserPerson>(p);
                 
-                UserPersonPeople.Add(up);
+                UserPersonPeople.Add(up);//do it in controller!!
             }
             return WithoutPasswords(UserPersonPeople);
         }
