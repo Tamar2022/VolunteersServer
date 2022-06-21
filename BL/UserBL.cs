@@ -147,20 +147,11 @@ namespace BL
             if (u == null) return null;
             var userPerson = _mapper.Map<Person, UserPerson>(p);
             userPerson.PassengerId = u.UserId;
+
+
             // authentication successful so generate jwt token
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration.GetSection("key").Value);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name,userPerson.PassengerId.ToString())
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            userPerson.Token = tokenHandler.WriteToken(token);
+          var  token = createToken((int)userPerson.PassengerId);
+            userPerson.Token = token;
             
             return WithoutPassword(userPerson);
             

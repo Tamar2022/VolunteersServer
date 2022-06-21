@@ -33,7 +33,7 @@ namespace Volunteers.Controllers
         {
             var futureDrives= await driveBL.GetFutureDrivesBLAsync(userId);
             List<DriveDTO> futureDrivesDTO=new List<DriveDTO>();
-            if(futureDrives.Count>0)
+            if(futureDrives!=null)
             {
             foreach (var drive in futureDrives)
             {

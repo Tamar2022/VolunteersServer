@@ -124,7 +124,7 @@ namespace BL
                     lastLocation = mPr.SourceStreet;//update lastLocation
                     string mailBody = " ?נמצאה התאמת נסיעה,האם הינך מאשר" + "\n  תאריך:" + mPr.Date + " : יציאה מ " + dr.SourceStreet + " :הגעה אל " + dr.DestinationStreet + '\n' + "    פרטי הנוסע\n"
                        +mPr.User.Person.FullName  +  ", " + "  יוצא מ" + mPr.SourceStreet + "מספר מקומות נדרש" + mPr.NumOfSeats;//???
-                    //sendEmail("212382261@mby.co.il", mailBody);//mPr.User.Person.Email
+                    sendEmail("212382261@mby.co.il", mailBody);//mPr.User.Person.Email
                     isMatch= true;//match has found
                 } 
             }
@@ -135,6 +135,7 @@ namespace BL
 
         public async Task<bool> MatchingFunctionForPassengerRequest(PassengerRequest pr)//from PassengerRequest
         {
+
             bool isHandicappedCar = (bool)pr.IsHandicapped;//check if the Passenger need Handicappedcar
             bool isMatch1 = false;
             List<DriverRequest> drList = await driverRequestDL.GetDriverRequestByDayDLAsync(pr.Time, pr.DestinationStreet);
@@ -202,7 +203,7 @@ namespace BL
                 await PassengerRequestDL.PutPassengerRequestDLAsync(pr.PassengerRequestId, pr);                                    
                 string mailBody = " ?נמצאה התאמת נסיעה,האם הינך מאשר" + "\n  תאריך:" + pr.Date + " : יציאה מ " + selectedDr.SourceStreet + " :הגעה אל " + selectedDr.DestinationStreet + '\n' + "    פרטי הנוסע\n"
                    + pr.User.Person.FullName + ", " + "  יוצא מ" + pr.SourceStreet + "מספר מקומות נדרש" + pr.NumOfSeats;
-                //sendEmail("212382261@mby.co.il", mailBody);//mPr.User.Person.Email                                                                                                    
+                sendEmail("212382261@mby.co.il", mailBody);//mPr.User.Person.Email                                                                                                    
 
                 return true;//match has been found
             }
@@ -331,7 +332,7 @@ namespace BL
             client.EnableSsl = true;
             client.UseDefaultCredentials = false;
             client.Credentials = basicCredential1;
-           
+            client.Host = "smtp.office365.com";
             //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             try
             {
