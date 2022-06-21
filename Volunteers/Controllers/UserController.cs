@@ -64,6 +64,7 @@ namespace Volunteers.Controllers
 
         // GET: get all passangers
         [HttpGet("{typeId}")]//למי יש הרשאה לגשת לזה
+        //[Authorize(Roles ="Manager")]
         [AllowAnonymous]
         public async Task<ActionResult<List<UserPerson>>> GetAllByTypeAsync( int typeId)
         {
@@ -74,7 +75,7 @@ namespace Volunteers.Controllers
         //PostByPersonAndTypeId
         [HttpPost("{typeId}")]
         [AllowAnonymous]
-        public async Task<User> PostAsync([FromBody] Person value, int typeId)
+        public async Task<UserPerson> PostAsync([FromBody] Person value, int typeId)
         {
             return await userBL.PostUserBLAsync(value, typeId);
         }
@@ -83,10 +84,9 @@ namespace Volunteers.Controllers
         [HttpPut("{personId}")]
         [AllowAnonymous]
         public async Task<Person> PutAsync(int personId, [FromBody] Person pd)
-        {
-            
-           return await userBL.PutUserBLAsync(personId, pd);
-             
+        {       
+            //create token?????????????????????????????????????????????????????????????????
+           return await userBL.PutUserBLAsync(personId, pd);             
         }
 
 

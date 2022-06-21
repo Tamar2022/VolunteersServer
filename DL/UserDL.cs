@@ -98,7 +98,7 @@ namespace DL
             await volunteersContext.SaveChangesAsync();
             if (u1 == null)
 
-                throw new Exception("can`t add");
+                return null;
 
 
             return u;

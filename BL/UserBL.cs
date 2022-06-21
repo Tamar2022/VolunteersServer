@@ -7,9 +7,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-
-
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace BL
 {
@@ -19,44 +20,60 @@ namespace BL
         IDriverDL driverDL;
         IPasswordHashHelper _passwordHashHelper;
         IMapper _mapper;
-        public UserBL(IUserDL userDL, IPersonDL personDL, IDriverDL driverDL, IPasswordHashHelper passwordHashHelper, IMapper mapper)
+        IConfiguration _configuration;
+        public UserBL(IConfiguration configuration,IUserDL userDL, IPersonDL personDL, IDriverDL driverDL, IPasswordHashHelper passwordHashHelper, IMapper mapper)
         {
             this.userDL = userDL;
             this.personDL = personDL; 
             this.driverDL = driverDL;
-            this._passwordHashHelper = passwordHashHelper;
-            this._mapper = mapper;
+            _passwordHashHelper = passwordHashHelper;
+            _mapper = mapper;
+            _configuration = configuration;
 
         }
         public async Task<UserPerson> GetUserBLAsync(string email, string password)
         {
            List<UserPerson> users = await userDL.GetUsersByEmailDLAsync(email);
+            if (users == null) return null;
             foreach (var u in users)
             {
                 string Hashedpassword = _passwordHashHelper.HashPassword(password, u.Salt, 1000, 8);
                 if (Hashedpassword.Equals(u.Password.TrimEnd()))
                 {
+                    string token;
                     if (u.DriverId != null)
                     {
                         var d = await driverDL.GetDriverDLAsync((int)u.DriverId);
+                       
                         if (d.IsActive == true)//the manager let him to join
                         {
                             u.DriverLicense = d.DriverLicense;
                             u.IsHandicappedCar = d.IsHandicappedCar;
                             u.IsActive = d.IsActive;
-                            return WithoutPassword(u);
+                            token = createToken(d.DriverId);
                         }
                         else
                         {
                             return null;
                         }
+                    }
+                    else
+                    {
+                        if(u.ManagerId!=null)
+                        {
+                            token = createToken((int)u.ManagerId);
+
+                        }
+                        else//passenger
+                        {
+                            token = createToken((int)u.PassengerId);
+                        }
+
                         
                     }
+                    u.Token = token;
                     return WithoutPassword(u);
                 }
-                   
-                
-
             }
             return null;
             //var u= await userDL.GetUserDLAsync(email, password);
@@ -117,18 +134,36 @@ namespace BL
             }
             return WithoutPasswords(UserPersonPeople);
         }
-        public async Task<User> PostUserBLAsync(Person p, int typeId)
+        public async Task<UserPerson> PostUserBLAsync(Person p, int typeId)
         {
-
             p.Salt = _passwordHashHelper.GenerateSalt(8);
             p.Password = _passwordHashHelper.HashPassword(p.Password, p.Salt, 1000, 8);
            
             int newPersonId = await personDL.PostPersonDLAsync(p);
-            if (newPersonId==0)
-                throw new Exception("can`t add");
-           
+            if (newPersonId == -1)
+                return null;
             User u = new User() { PersonId = newPersonId, TypeId = typeId };
-            return await userDL.PostUserDLAsync(u);
+             u=await userDL.PostUserDLAsync(u);
+            if (u == null) return null;
+            var userPerson = _mapper.Map<Person, UserPerson>(p);
+            userPerson.PassengerId = u.UserId;
+            // authentication successful so generate jwt token
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_configuration.GetSection("key").Value);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name,userPerson.PassengerId.ToString())
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            userPerson.Token = tokenHandler.WriteToken(token);
+            
+            return WithoutPassword(userPerson);
+            
         }
 
 
@@ -141,7 +176,23 @@ namespace BL
         {
             return users.Select(x => WithoutPassword(x)).ToList();
         }
-
+        public  string createToken(int id)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_configuration.GetSection("key").Value);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, id.ToString())
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            string token1 = tokenHandler.WriteToken(token);
+            return token1;
+        }
 
         public static UserPerson WithoutPassword(UserPerson user)
         {

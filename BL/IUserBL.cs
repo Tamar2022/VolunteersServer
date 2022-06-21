@@ -9,7 +9,7 @@ namespace BL
         Task<UserPerson> GetUserBLAsync(string email, string password);
         //Task<int> GetUserTypeBLAsync(string email, string password);
         Task<List<UserPerson>> GetUserBLAsync(int typeId);
-        Task<User> PostUserBLAsync(Person value, int typeId);
+        Task<UserPerson> PostUserBLAsync(Person p, int typeId);
         Task<Person> PutUserBLAsync(int id,Person p);
 
     }

@@ -59,7 +59,7 @@ namespace BL
             
 
             var user = await userBL.PostUserBLAsync(newP, 1);
-            newD.UserId = user.UserId;
+            newD.UserId = user.PassengerId;
             var driver = await driverDL.PostDriverDLAsync(newD);
 
             return driver;

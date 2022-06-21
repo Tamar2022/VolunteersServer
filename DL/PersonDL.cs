@@ -34,7 +34,7 @@ namespace DL
             }
             else
             {
-                return person.PersonId;
+                return -1;
             }            
         }
           

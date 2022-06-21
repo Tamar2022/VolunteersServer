@@ -25,7 +25,8 @@ namespace DTO
         public int? ManagerId { get; set; }
         public int? DriverId { get; set; }
         public int? PassengerId { get; set; }
-       
+
+        public string Token { get; set; }
 
     }
 }
