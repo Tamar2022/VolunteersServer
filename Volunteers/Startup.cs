@@ -59,6 +59,15 @@ namespace Volunteers
                     ValidateAudience = false
                 };
             });
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", p =>
+                {
+                    p.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+                });
+            });
             services.AddScoped<IMatchingFunctionBL, MatchingFunctionBL>();
             services.AddResponseCaching();
             services.AddScoped<IImageBL, ImageBL>();
@@ -127,26 +136,32 @@ namespace Volunteers
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCacheMiddleware();
-            app.UseAuthentication();
             app.UseCSPMiddleware();
+          
+            app.UseAuthentication();
             app.UseRouting();
-            
-            app.Map("/api", (api1) =>
+            app.UseCors("AllowAll");
+            app.Map("/api", app2 =>
             {
-                api1.UseRouting();
-                api1.UseRatingMiddleware();
-                api1.UseAuthorization();
+                app.UseAuthentication();
+                app2.UseRouting();
+                app2.UseRatingMiddleware();
 
-                api1.UseEndpoints(endpoints =>
+                app2.UseAuthorization();
+
+                app2.UseEndpoints(endpoints2 =>
                 {
-                    endpoints.MapControllers();
+                    endpoints2.MapControllers();
                 });
-                api1.UseErrorMiddleware();
+            });
 
-            }
-            );
+
+            app.UseRatingMiddleware();
+
             app.UseAuthorization();
             app.UseResponseCaching();     
+
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

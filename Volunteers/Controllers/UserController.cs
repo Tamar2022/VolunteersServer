@@ -64,7 +64,7 @@ namespace Volunteers.Controllers
 
         // GET: get all passangers
         [HttpGet("{typeId}")]//למי יש הרשאה לגשת לזה
-        //[Authorize(Roles ="Manager")]
+        
         [AllowAnonymous]
         public async Task<ActionResult<List<UserPerson>>> GetAllByTypeAsync( int typeId)
         {

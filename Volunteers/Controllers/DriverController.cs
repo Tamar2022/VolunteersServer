@@ -3,6 +3,8 @@ using BL;
 using DL;
 using DTO;
 using Entity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -17,8 +19,10 @@ using System.Threading.Tasks;
 
 namespace Volunteers.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
+ 
     public class DriverController : ControllerBase
     {
         IMapper mapper;
@@ -71,6 +75,7 @@ namespace Volunteers.Controllers
 
         [HttpGet]
         [Route("GetImagesForUser")]
+        
         public async Task<ActionResult<string>> GetImagesForUser(int driverId)
         {
             string json = string.Empty;
