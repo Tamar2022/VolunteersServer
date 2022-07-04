@@ -12,6 +12,7 @@ using DTO;
 
 namespace Volunteers.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DriveController : ControllerBase
