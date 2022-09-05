@@ -74,7 +74,7 @@ namespace Volunteers.Controllers
         }
         //PostByPersonAndTypeId
         [HttpPost("{typeId}")]
-       
+       [AllowAnonymous]
         public async Task<UserPerson> PostAsync([FromBody] Person value, int typeId)
         {
             return await userBL.PostUserBLAsync(value, typeId);
