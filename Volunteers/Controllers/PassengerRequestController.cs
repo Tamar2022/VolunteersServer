@@ -40,8 +40,6 @@ namespace Volunteers.Controllers
 
 
 
-        // POST api/<
-        // Request>
         [HttpPost]
         public async Task<PassengerRequest> PostAsync([FromBody] PassengerRequest value)
         {
